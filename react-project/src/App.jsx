@@ -1,6 +1,6 @@
 import "./App.css";
 import chef from "./images/chef.jpg";
-
+import {useState, useReducer} from "react";
 function Header({ name, year }) {
   return (
     <header>
@@ -21,11 +21,12 @@ const dishObjects = items.map((dish, i) => ({
   title: dish
 }));
 
-function Main({ dishes }) {
+function Main({ dishes, openStatus, onStatus }) {
   return (
     <>
       <div>
         <h2>Welcome to this beautiful restaurant!</h2>
+        <button onClick={() => onStatus(!openStatus)}>Child button</button>
       </div>
       <main>
         <img
@@ -49,10 +50,20 @@ function Main({ dishes }) {
 }
 
 function App() {
+  // const [status, setStatus] = useState(true);
+  const [status, toggle] = useReducer(
+    (status) => !status,
+    true
+  )
+  console.log(status);
   return (
     <div>
+      <h1> The kitchen is {status ? "open" : "close"}</h1>
+      <button onClick={toggle}>
+        {status ? "close" : "open"} restaurant
+      </button>
       <Header name="Alex" year={new Date().getFullYear()} />
-      <Main dishes={dishObjects} />
+      <Main dishes={dishObjects} openStatus={status} onStatus={toggle}/>
     </div>
   );
 }
